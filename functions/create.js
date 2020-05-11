@@ -7,15 +7,13 @@ exports.handler = async (event, context) => {
   const client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
   })
+
   /* parse the string body into a useable JS object */
-  console.log(JSON.stringify(event))
-  const data = JSON.parse(event.body)
-  console.log('Function `create` invoked', data)
-  const todoItem = {
-    data: data
-  }
+  console.log('Function `create` invoked', JSON.stringify(event.queryStringParameters))
+  query = event.queryStringParameters
+
   /* construct the fauna query */
-  return client.query(q.Create(q.Collection('tokens'), { data: { token: 'asdf' } }))
+  return client.query(q.Create(q.Collection('tokens'), { data: { token: query.token, key: query.key } }))
     .then((response) => {
       console.log('success', response)
       /* Success! return the response with statusCode 200 */
