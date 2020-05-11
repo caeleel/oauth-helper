@@ -1,0 +1,35 @@
+<html>
+<body>
+<div id="msg"></div>
+<script>
+  const hash = window.location.hash;
+
+  const response = hash.substring(1).split('&').reduce((result, pair) => {
+    const keyValue = pair.split('=');
+    result[keyValue[0]] = keyValue[1];
+    return result;
+  }, {});
+
+  if (response.access_token && response.state) {
+    const msg = document.getElementById("msg");
+    fetch(`/.netlify/functions/create?key=${response.state}&token=${response.access_token}`)
+      .then((response) => {
+        msg.innerHTML = "Success! You have logged in. You may now return to the Figma app.";
+      })
+      .catch((error) => {
+        msg.innerHTML = ":(";
+      });
+  } else {
+    const searchStr = window.location.search;
+    const search = searchStr.substring(1).split('&').reduce((result, pair) => {
+      const keyValue = pair.split('=');
+      result[keyValue[0]] = keyValue[1];
+      return result;
+    }, {});
+    if (search.key) {
+      window.location.href = `https://app.netlify.com/authorize?client_id=8f9901241283018dfe8848d0a98a8a177516fc811b1368fd24367feb8b14bd9e&response_type=token&redirect_uri=https://oauth-helper.netlify.app/&state=${search.key}`
+    }
+  }
+</script>
+</body>
+</html>
