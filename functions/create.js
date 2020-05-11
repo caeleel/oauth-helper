@@ -8,6 +8,7 @@ exports.handler = async (event, context) => {
     secret: process.env.FAUNADB_SERVER_SECRET
   })
   /* parse the string body into a useable JS object */
+  console.log(event.body)
   const data = JSON.parse(event.body)
   console.log('Function `create` invoked', data)
   const todoItem = {
