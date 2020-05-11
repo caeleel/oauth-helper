@@ -11,7 +11,7 @@ exports.handler = async (event, context) => {
   console.log('Function `fetch` invoked', JSON.stringify(event.queryStringParameters))
   query = event.queryStringParameters
   /* construct the fauna query */
-  return client.query(q.Get(q.Match((q.Index('tokens_by_key'), query.key))))
+  return client.query(q.Get(q.Match(q.Index('tokens_by_key'), query.key)))
     .then((response) => {
       console.log('success', response)
       /* Success! return the response with statusCode 200 */
