@@ -7,25 +7,25 @@ exports.handler = async (event, context) => {
   const client = new faunadb.Client({
     secret: process.env.FAUNADB_SERVER_SECRET
   })
-
   /* parse the string body into a useable JS object */
-  console.log('Function `create` invoked', JSON.stringify(event.queryStringParameters))
+  console.log('Function `fetch` invoked', JSON.stringify(event.queryStringParameters))
   query = event.queryStringParameters
-
   /* construct the fauna query */
-  return client.query(q.Create(q.Collection('tokens'), { data: { token: query.token, key: query.key } }))
+  return client.query(q.Get(q.Match((q.Index('tokens_by_key'), query.key))))
     .then((response) => {
       console.log('success', response)
       /* Success! return the response with statusCode 200 */
       return {
         statusCode: 200,
-        body: JSON.stringify(response)
+        headers: {'Access-Control-Allow-Origin': '*'},
+        body: JSON.stringify(response.data)
       }
     }).catch((error) => {
       console.log('error', error)
       /* Error! return the error with statusCode 400 */
       return {
         statusCode: 400,
+        headers: {'Access-Control-Allow-Origin': '*'},
         body: JSON.stringify(error)
       }
     })
