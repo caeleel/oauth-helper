@@ -19,6 +19,7 @@ exports.handler = async (event, context) => {
       /* Success! return the response with statusCode 200 */
       return {
         statusCode: 200,
+        headers: {'Access-Control-Allow-Origin': '*'},
         body: JSON.stringify(response)
       }
     }).catch((error) => {
@@ -26,6 +27,7 @@ exports.handler = async (event, context) => {
       /* Error! return the error with statusCode 400 */
       return {
         statusCode: 400,
+        headers: {'Access-Control-Allow-Origin': '*'},
         body: JSON.stringify(error)
       }
     })
