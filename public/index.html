@@ -1,6 +1,24 @@
 <html>
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"> 
+</head>
 <body>
-<div id="msg"></div>
+  <div class="content">
+    <div class="header">Magic Button</div>
+    <div class="main">
+      <div class="left">
+        <div>
+          <h1 id="msg"></h1>
+          <p id="msg-body"></p>
+        </div>
+      </div>
+      <div class="right">
+        <div class="image">(To Do)</div>
+      </div>
+    </div>
+  </div>
+  
 <script>
   const hash = window.location.hash;
 
@@ -12,12 +30,14 @@
 
   if (response.access_token && response.state) {
     const msg = document.getElementById("msg");
+    const msgBody = document.getElementById("msg-body")
     fetch(`/.netlify/functions/create?key=${response.state}&token=${response.access_token}`)
       .then((response) => {
-        msg.innerHTML = "Success! You have logged in. You may now return to the Figma app.";
+        msg.innerHTML = "Awesome, you're logged in!";
+        msgBody.innerHTML = "Head back to the Figma app to start deploying your designs.";
       })
       .catch((error) => {
-        msg.innerHTML = ":(";
+        msg.innerHTML = "Hm, something went wrong.";
       });
   } else {
     const searchStr = window.location.search;
